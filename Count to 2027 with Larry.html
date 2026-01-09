@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Retirement Countdown — Larry King Kaprelian</title>
+<style>
+  :root{
+    --bg1:#0f1724;
+    --bg2:#0b1b2b;
+    --accent:#ff7a59;
+    --muted:#7b8ea3;
+  }
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;}
+  body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(180deg,var(--bg1),var(--bg2));
+    padding:28px;
+  }
+
+  .outer {
+    width:100%;
+    max-width:1180px;
+    padding: 36px;
+    box-sizing: border-box;
+    border-radius: 18px;
+    box-shadow: 0 18px 40px rgba(2,6,23,0.6);
+  }
+
+  .inner-wrap{
+    display:flex;
+    align-items:stretch;
+    gap:22px;
+    width:100%;
+  }
+
+  /* Center card */
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), #fff);
+    border-radius:12px;
+    padding:18px;
+    flex:1 1 640px;
+    box-shadow: 0 10px 28px rgba(2,6,23,0.45);
+    position:relative;
+    overflow:hidden;
+
+    display:flex;
+    flex-direction:column;
+  }
+
+  .top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px;}
+  .title{font-size:1.35rem;font-weight:700;color:#0b1b2b;display:flex;gap:10px;align-items:center;}
+  .sub{color:var(--muted);font-size:0.95rem;margin-top:6px;}
+
+  /* Card content split */
+  .card-content {
+    display:flex;
+    gap:18px;
+    align-items:stretch;
+    flex:1 1 auto;
+  }
+
+  .countdown-column{
+    flex:1 1 48%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .big-number{
+    background: linear-gradient(90deg, rgba(255,122,89,0.07), rgba(255,209,102,0.04));
+    padding:18px;border-radius:12px;
+    width:100%;
+    max-width:520px;
+    box-shadow: inset 0 -4px 12px rgba(255,122,89,0.03);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:100%;
+    min-height:220px;
+  }
+  .time-grid{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;}
+  .unit{background:#fff;border:1px solid rgba(11,27,43,0.06);padding:12px 10px;border-radius:10px;width:110px;text-align:center;box-shadow:0 8px 14px rgba(2,6,23,0.06);}
+  .value{font-size:2.2rem;font-weight:800;color:var(--accent);}
+  .label{font-size:0.85rem;color:var(--muted);margin-top:6px;}
+
+  .info-column{
+    flex:0 0 320px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+    justify-content:flex-start;
+  }
+
+  .card-header-image {
+    width:100%;
+    max-width:300px;
+    max-height:140px;
+    display:block;
+    object-fit:contain;
+    border-radius:8px;
+    box-shadow:0 8px 18px rgba(2,6,23,0.08);
+    background: #fff;
+  }
+
+  .almost {
+    font-weight:800;
+    font-size:1.05rem;
+    color:#0b1b2b;
+    text-align:center;
+    margin-top:4px;
+  }
+  .info-sub { color:var(--muted); font-size:0.9rem; text-align:center; margin-top:4px; }
+
+  .controls {
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    align-items:center;
+    width:100%;
+    margin-top:6px;
+  }
+  .cta-row{display:flex;gap:10px;align-items:center;}
+  .btn{background:linear-gradient(90deg,var(--accent),#ff9b7b);color:white;padding:9px 12px;border-radius:10px;border:none;cursor:pointer;font-weight:700;box-shadow:0 8px 18px rgba(255,122,89,0.14);}
+  .btn.secondary{background:transparent;border:1px solid rgba(11,27,43,0.06);color:#0b1b2b;font-weight:600;}
+  .small{color:var(--muted);font-size:0.9rem;}
+
+  /* Rightmost profile */
+  .profile{
+    width:300px;
+    min-width:260px;
+    background:linear-gradient(180deg,#001926,#003049);
+    border-radius:12px;padding:14px;color:white;
+    box-shadow:0 12px 28px rgba(0,0,0,0.45);
+    display:flex;flex-direction:column;align-items:center;gap:10px;position:relative;overflow:hidden;
+  }
+  .avatar{
+    width:200px;height:260px;border-radius:10px;background:linear-gradient(180deg,#083b4b,#0b7285);
+    display:flex;align-items:center;justify-content:center;border:4px solid rgba(255,255,255,0.06);overflow:hidden;
+  }
+  .avatar img{width:100%;height:100%;object-fit:cover;border-radius:10px;display:block;}
+
+  .name{font-weight:800;font-size:1.05rem;margin-top:8px;text-align:center;}
+  .role{font-size:0.86rem;color:rgba(255,255,255,0.85);text-align:center;margin-bottom:6px;}
+
+  .profile-gif{width:180px;height:auto;border-radius:8px;margin-top:6px;border:3px solid rgba(255,255,255,0.04);box-shadow:0 8px 18px rgba(0,0,0,0.45);background:#001a24;}
+
+  /* Balloons + canvases */
+  .balloon{position:absolute;width:26px;height:36px;border-radius:40px;opacity:0.95;bottom:-50px;left:20px;transform-origin:center;animation:floaty 6s ease-in-out infinite;}
+  .balloon:nth-child(1){background:#ffd166;left:30px}
+  .balloon:nth-child(2){background:#06d6a0;left:80px;animation-duration:5.6s}
+  .balloon:nth-child(3){background:#118ab2;left:130px;animation-duration:6.6s}
+  .balloon:nth-child(4){background:#ef476f;left:180px;animation-duration:5.2s}
+  @keyframes floaty{0%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-42px) rotate(6deg)}100%{transform:translateY(0) rotate(-4deg)}}
+  canvas.effect{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;}
+
+  /* Responsive: stack columns vertically on narrow screens */
+  @media (max-width:900px){
+    .card-content{flex-direction:column; align-items:center;}
+    .info-column{flex:1 1 auto; width:100%; max-width:520px;}
+    .countdown-column{width:100%;}
+    .profile{width:92%}
+    .card{width:92%}
+    .card-header-image{max-width:320px;}
+  }
+</style>
+</head>
+<body>
+  <div class="outer" aria-label="Framed retirement countdown">
+    <div class="inner-wrap">
+      <!-- center card -->
+      <div class="card" role="region" aria-label="Countdown card">
+        <div class="top">
+          <div>
+            <div class="title"><span>🎉</span> Howdy! Party?  </div>
+            <div class="sub" id="subline"> A Countdown hyped since bronze ages!</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="small" id="targetInfo">Target: 2026-12-31 23:59 (Local)</div>
+            <div class="small" style="font-weight:700;margin-top:6px;">Employee: <span id="employeeNameDisplay">Larry King Kaprelian</span></div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <!-- LEFT column: countdown -->
+          <div class="countdown-column">
+            <div class="big-number" role="timer" aria-live="polite" aria-atomic="true">
+              <div class="time-grid" id="timeGrid">
+                <div class="unit">
+                  <div class="value" id="days">0</div>
+                  <div class="label">Days</div>
+                </div>
+                <div class="unit">
+                  <div class="value" id="hours">00</div>
+                  <div class="label">Hours</div>
+                </div>
+                <div class="unit">
+                  <div class="value" id="minutes">00</div>
+                  <div class="label">Minutes</div>
+                </div>
+                <div class="unit">
+                  <div class="value" id="seconds">00</div>
+                  <div class="label">Seconds</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT column: header image + "Almost there!" + controls -->
+          <div class="info-column">
+            <img src="image.png" alt="Decorative image" class="card-header-image" id="cardHeaderImg"
+                 onerror="(function(e){ e.target.style.display='none'; })(event)">
+            <div class="almost">Almost there!</div>
+            <div class="info-sub">And you thought this day would never come - When the big day comes, celebrate with confetti — or some (joyful) tears.</div>
+
+            <div class="controls">
+              <div class="cta-row">
+                <button class="btn" id="confettiBtn">Trigger confetti</button>
+                <button class="btn" id="tearsBtn">Trigger tears</button>
+              </div>
+              <div style="display:flex;gap:10px;width:100%;justify-content:center;">
+                <button class="btn secondary" id="bothBtn">Tears + Confetti</button>
+              </div>
+              <div class="small"><strong id="status" style="color:#16a34a;display:none">🎊 Retirement reached!</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- decorative balloons & canvases -->
+        <div class="balloon" aria-hidden="true" style="left:8%;"></div>
+        <div class="balloon" aria-hidden="true" style="left:22%; animation-duration:5.6s"></div>
+        <div class="balloon" aria-hidden="true" style="left:44%; animation-duration:6.6s"></div>
+        <div class="balloon" aria-hidden="true" style="left:68%; animation-duration:5.2s"></div>
+
+        <canvas class="effect" id="confettiCanvas" aria-hidden="true"></canvas>
+        <canvas class="effect" id="tearsCanvas" aria-hidden="true"></canvas>
+      </div>
+
+      <!-- rightmost profile (avatar, name+years above GIF now) -->
+      <aside class="profile" role="complementary" aria-label="Employee profile">
+        <div class="avatar" id="avatar"></div>
+
+        <!-- NAME and YEARS placed above the GIF -->
+        <div class="name" id="employeeName">Larry King Kaprelian</div>
+        <div class="role" id="employeeRole">Years of service: Don't bother, I guess it's time to trade in my badge for a beach chair!</div>
+
+        <!-- GIF placed under name/years -->
+        <img id="profileGif" class="profile-gif" src="giphy.gif" alt="Celebration GIF" onerror="(function(e){ if(e.target.src==='./giphy.gif'){ e.target.src='giphy.gif'; } })(event)">
+      </aside>
+    </div>
+  </div>
+
+<script>
+/* File paths — images should be in the same folder as the .html */
+const IMAGE_PATH = "./Larry.png"; // fallback to 'Larry.png' if backslash path fails
+
+/* Countdown targets */
+const localTarget = new Date(2026,11,31,23,59,0);
+const utcTarget = new Date(Date.UTC(2026,11,31,23,59,0));
+
+/* Elements */
+const els = {
+  days: document.getElementById('days'),
+  hours: document.getElementById('hours'),
+  minutes: document.getElementById('minutes'),
+  seconds: document.getElementById('seconds'),
+  confettiCanvas: document.getElementById('confettiCanvas'),
+  tearsCanvas: document.getElementById('tearsCanvas'),
+  confettiBtn: document.getElementById('confettiBtn'),
+  tearsBtn: document.getElementById('tearsBtn'),
+  bothBtn: document.getElementById('bothBtn'),
+  avatar: document.getElementById('avatar'),
+  status: document.getElementById('status'),
+  employeeName: document.getElementById('employeeName'),
+  employeeNameDisplay: document.getElementById('employeeNameDisplay'),
+  employeeRole: document.getElementById('employeeRole'),
+  targetInfo: document.getElementById('targetInfo'),
+  cardHeaderImg: document.getElementById('cardHeaderImg')
+};
+
+let useUTC = false;
+let timerId = null;
+
+function pad(n){ return String(n).padStart(2,'0'); }
+
+function update(){
+  const now = new Date();
+  const target = useUTC ? utcTarget : localTarget;
+  const nowTime = useUTC ? Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()) : now.getTime();
+  let diff = target.getTime() - nowTime;
+
+  if (diff <= 0) {
+    els.days.textContent='0';
+    els.hours.textContent='00';
+    els.minutes.textContent='00';
+    els.seconds.textContent='00';
+    els.status.style.display = 'inline';
+    startConfetti(160);
+    startTears(60);
+    clearInterval(timerId);
+    return;
+  }
+
+  const sec=1000,min=sec*60,hr=min*60,day=hr*24;
+  const days = Math.floor(diff/day); diff-=days*day;
+  const hours = Math.floor(diff/hr); diff-=hours*hr;
+  const minutes = Math.floor(diff/min); diff-=minutes*min;
+  const seconds = Math.floor(diff/sec);
+
+  els.days.textContent = days;
+  els.hours.textContent = pad(hours);
+  els.minutes.textContent = pad(minutes);
+  els.seconds.textContent = pad(seconds);
+}
+
+/* ---------- Confetti ---------- */
+const confetti = {canvas: els.confettiCanvas, ctx:null, w:0,h:0, parts:[], running:false};
+function confettiResize(){
+  const c = confetti.canvas;
+  confetti.w = c.width = c.clientWidth * devicePixelRatio;
+  confetti.h = c.height = c.clientHeight * devicePixelRatio;
+  confetti.ctx = c.getContext('2d');
+  confetti.ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+}
+window.addEventListener('resize', confettiResize);
+function startConfetti(count=80){
+  if (!confetti.ctx) confettiResize();
+  for (let i=0;i<count;i++){
+    confetti.parts.push({
+      x: Math.random()*confetti.w/devicePixelRatio,
+      y: -10 - Math.random()*40,
+      vx: (Math.random()-0.5)*6,
+      vy: Math.random()*3 + 2,
+      size: Math.random()*9 + 6,
+      color: ['#ff7a59','#ffd166','#06d6a0','#118ab2','#ef476f','#845EC2'][Math.floor(Math.random()*6)],
+      rot: Math.random()*360, rotSpeed:(Math.random()-0.5)*10, life: Math.random()*120 + 80
+    });
+  }
+  if (!confetti.running){ confetti.running=true; requestAnimationFrame(confettiLoop); }
+}
+function confettiLoop(){
+  const ctx = confetti.ctx;
+  ctx.clearRect(0,0,confetti.canvas.width,confetti.canvas.height);
+  for (let p of confetti.parts){
+    p.x += p.vx; p.y += p.vy; p.vy += 0.06; p.rot += p.rotSpeed; p.life--;
+    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
+    ctx.fillStyle = p.color; ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6);
+    ctx.restore();
+  }
+  confetti.parts = confetti.parts.filter(p => p.life>0 && p.y < confetti.h/devicePixelRatio + 80);
+  if (confetti.parts.length>0) requestAnimationFrame(confettiLoop); else { confetti.running=false; ctx.clearRect(0,0,confetti.canvas.width,confetti.canvas.height); }
+}
+
+/* ---------- Tears ---------- */
+const tears = {canvas: els.tearsCanvas, ctx:null, w:0,h:0, parts:[], running:false};
+function tearsResize(){
+  const c = tears.canvas;
+  tears.w = c.width = c.clientWidth * devicePixelRatio;
+  tears.h = c.height = c.clientHeight * devicePixelRatio;
+  tears.ctx = c.getContext('2d');
+  tears.ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+}
+window.addEventListener('resize', tearsResize);
+function startTears(count=40){
+  if (!tears.ctx) tearsResize();
+  for (let i=0;i<count;i++){
+    const size = Math.random()*8 + 8;
+    tears.parts.push({
+      x: Math.random()*tears.w/devicePixelRatio,
+      y: -Math.random()*60,
+      vx: Math.sin(Math.random()*Math.PI*2)*0.6,
+      vy: Math.random()*1.2 + 1.6,
+      w: size*0.6, h: size*1.8, sway: Math.random()*0.6 + 0.4,
+      swayPhase: Math.random()*Math.PI*2, alpha:0.9, life: Math.random()*220 + 180, rot: (Math.random()-0.5)*0.6
+    });
+  }
+  if (!tears.running){ tears.running=true; requestAnimationFrame(tearsLoop); }
+}
+function drawTear(ctx,p){
+  const w=p.w,h=p.h;
+  const grad = ctx.createLinearGradient(0,-h/2,0,h/2);
+  grad.addColorStop(0, 'rgba(220,246,255,'+p.alpha+')');
+  grad.addColorStop(1, 'rgba(36,150,200,'+(0.75*p.alpha)+')');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.ellipse(0,-h*0.18,w*0.6,w*0.6,0,0,Math.PI*2);
+  ctx.moveTo(0,-h*0.18 + w*0.6);
+  ctx.quadraticCurveTo(w*0.9,h*0.2,0,h*0.5);
+  ctx.quadraticCurveTo(-w*0.9,h*0.2,0,-h*0.18 + w*0.6);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.fillStyle = 'rgba(255,255,255,'+(0.6*p.alpha)+')';
+  ctx.ellipse(-w*0.18,-h*0.3,w*0.18,w*0.3,-0.4,0,Math.PI*2);
+  ctx.fill();
+}
+function tearsLoop(){
+  const ctx = tears.ctx;
+  ctx.clearRect(0,0,tears.canvas.width,tears.canvas.height);
+  for (let p of tears.parts){
+    p.x += p.vx + Math.sin(p.swayPhase)*p.sway*0.6;
+    p.y += p.vy; p.swayPhase += 0.03; p.life--; p.alpha = Math.max(0,p.life/400);
+    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); drawTear(ctx,p); ctx.restore();
+  }
+  tears.parts = tears.parts.filter(p => p.life>0 && p.y < tears.h/devicePixelRatio + 60);
+  if (tears.parts.length>0) requestAnimationFrame(tearsLoop); else { tears.running=false; ctx.clearRect(0,0,tears.canvas.width,tears.canvas.height); }
+}
+
+/* Buttons */
+els.confettiBtn.addEventListener('click', ()=> startConfetti(120));
+els.tearsBtn.addEventListener('click', ()=> startTears(60));
+els.bothBtn.addEventListener('click', ()=> { startTears(60); startConfetti(120); });
+
+/* Put the rectangular Larry image into the avatar container; fallback if backslash path fails */
+(function setAvatar(){
+  els.avatar.innerHTML = '';
+  const img = document.createElement('img');
+  img.alt = 'Larry King Kaprelian photo';
+  img.src = IMAGE_PATH;
+  img.onerror = function(){
+    if (this.src === IMAGE_PATH) this.src = 'Larry.png';
+  };
+  els.avatar.appendChild(img);
+})();
+
+/* Hide header image if it can't load (onerror on img handles that), set labels */
+if (els.cardHeaderImg && els.cardHeaderImg.complete && els.cardHeaderImg.naturalWidth === 0) {
+  els.cardHeaderImg.style.display = 'none';
+}
+els.employeeName.textContent = 'Larry King Kaprelian';
+els.employeeNameDisplay.textContent = 'Larry King Kaprelian';
+els.employeeRole.textContent = "Years of service: Don't bother, I guess it's time to trade in my badge for a beach chair!";
+
+/* start countdown + canvas sizing */
+update();
+timerId = setInterval(update,1000);
+confettiResize(); tearsResize();
+</script>
+</body>
+</html>
